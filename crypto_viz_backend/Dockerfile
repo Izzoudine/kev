@@ -49,12 +49,10 @@ WORKDIR /app
 # Copy application code
 COPY --chown=appuser:appgroup . .
 
-# Copy wait script
-COPY --chown=appuser:appgroup wait-for-it.sh /app/wait-for-it.sh
-RUN chmod +x /app/wait-for-it.sh
-
-# Create staticfiles directory
-RUN mkdir -p staticfiles && chown -R appuser:appgroup /app
+# Create staticfiles directory and make wait script executable (as root, before switching user)
+RUN mkdir -p /app/staticfiles && \
+    chmod +x /app/wait-for-it.sh && \
+    chown -R appuser:appgroup /app
 
 # Switch to non-root user
 USER appuser
