@@ -47,9 +47,9 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app
 
 # Copy application code
-COPY --chown=appuser:appgroup . .
+COPY . .
 
-# Create wait script with proper permissions
+# Create wait script, make executable, and set ownership properly
 RUN echo '#!/bin/sh' > /app/wait-for-it.sh && \
     echo 'set -e' >> /app/wait-for-it.sh && \
     echo 'TIMESCALE_HOST="${TIMESCALE_DB_HOST:-timescaledb}"' >> /app/wait-for-it.sh && \
@@ -72,10 +72,8 @@ RUN echo '#!/bin/sh' > /app/wait-for-it.sh && \
     echo 'echo "✓ Redis is ready"' >> /app/wait-for-it.sh && \
     echo 'sleep 5' >> /app/wait-for-it.sh && \
     echo 'exec "$@"' >> /app/wait-for-it.sh && \
-    chmod +x /app/wait-for-it.sh
-
-# Create staticfiles directory
-RUN mkdir -p /app/staticfiles && \
+    chmod +x /app/wait-for-it.sh && \
+    mkdir -p /app/staticfiles && \
     chown -R appuser:appgroup /app
 
 # Switch to non-root user
