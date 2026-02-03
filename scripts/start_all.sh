@@ -93,7 +93,7 @@ cd "$PROJECT_DIR/spark_jobs"
 
 if [ ! -d "venv" ]; then
     log_info "Création de l'environnement virtuel pour Spark..."
-    python -m venv venv || log_error "Erreur lors de la création de l'environnement virtuel"
+    python3 -m venv venv || log_error "Erreur lors de la création de l'environnement virtuel"
 fi
 
 if [ ! -f "venv/bin/activate" ]; then
@@ -109,14 +109,14 @@ if [ $? -ne 0 ]; then
 fi
 
 log_info "Démarrage du job d'ingestion Spark..."
-nohup python kafka_to_timescale.py >> "$PROJECT_DIR/logs/spark_ingestion.log" 2>&1 &
+nohup python3 kafka_to_timescale.py >> "$PROJECT_DIR/logs/spark_ingestion.log" 2>&1 &
 SPARK_INGEST_PID=$!
 echo $SPARK_INGEST_PID > "$PROJECT_DIR/logs/spark_ingestion.pid"
 log_info "Job d'ingestion Spark démarré (PID: $SPARK_INGEST_PID)"
 sleep 3
 
 log_info "Démarrage du job d'analytics Spark..."
-nohup python sentiment_prediction_job.py >> "$PROJECT_DIR/logs/spark_analytics.log" 2>&1 &
+nohup python3 sentiment_prediction_job.py >> "$PROJECT_DIR/logs/spark_analytics.log" 2>&1 &
 SPARK_ANALYTICS_PID=$!
 echo $SPARK_ANALYTICS_PID > "$PROJECT_DIR/logs/spark_analytics.pid"
 log_info "Job d'analytics Spark démarré (PID: $SPARK_ANALYTICS_PID)"
