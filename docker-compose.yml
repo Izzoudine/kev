@@ -137,19 +137,10 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health/"]
-      interval: 30s
-      timeout: 10s
-      start_period: 45s
-      retries: 3
     depends_on:
-      kafka:
-        condition: service_healthy
-      timescaledb:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - kafka
+      - timescaledb
+      - redis
     restart: unless-stopped
 
   # Prometheus pour monitoring
@@ -227,14 +218,17 @@ services:
         limits:
           cpus: '0.25'
           memory: 128M
-        reservations:
-          cpus: '0.125'
-          memory: 64M
     logging:
       driver: "json-file"
       options:
         max-size: "5m"
         max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9308/metrics"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 5
     depends_on:
       kafka:
         condition: service_healthy
