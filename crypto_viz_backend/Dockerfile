@@ -49,9 +49,33 @@ WORKDIR /app
 # Copy application code
 COPY --chown=appuser:appgroup . .
 
-# Create staticfiles directory and make wait script executable (as root, before switching user)
+# Create wait script with proper permissions
+RUN echo '#!/bin/sh' > /app/wait-for-it.sh && \
+    echo 'set -e' >> /app/wait-for-it.sh && \
+    echo 'TIMESCALE_HOST="${TIMESCALE_DB_HOST:-timescaledb}"' >> /app/wait-for-it.sh && \
+    echo 'TIMESCALE_PORT="${TIMESCALE_DB_PORT:-5432}"' >> /app/wait-for-it.sh && \
+    echo 'KAFKA_HOST="${KAFKA_HOST:-kafka}"' >> /app/wait-for-it.sh && \
+    echo 'KAFKA_PORT="${KAFKA_PORT:-29092}"' >> /app/wait-for-it.sh && \
+    echo 'REDIS_HOST="${REDIS_HOST:-redis}"' >> /app/wait-for-it.sh && \
+    echo 'REDIS_PORT="${REDIS_PORT:-6379}"' >> /app/wait-for-it.sh && \
+    echo '' >> /app/wait-for-it.sh && \
+    echo 'echo "Waiting for TimescaleDB..."' >> /app/wait-for-it.sh && \
+    echo 'while ! nc -z "$TIMESCALE_HOST" "$TIMESCALE_PORT" 2>/dev/null; do sleep 1; done' >> /app/wait-for-it.sh && \
+    echo 'echo "✓ TimescaleDB is ready"' >> /app/wait-for-it.sh && \
+    echo '' >> /app/wait-for-it.sh && \
+    echo 'echo "Waiting for Kafka..."' >> /app/wait-for-it.sh && \
+    echo 'while ! nc -z "$KAFKA_HOST" "$KAFKA_PORT" 2>/dev/null; do sleep 1; done' >> /app/wait-for-it.sh && \
+    echo 'echo "✓ Kafka is ready"' >> /app/wait-for-it.sh && \
+    echo '' >> /app/wait-for-it.sh && \
+    echo 'echo "Waiting for Redis..."' >> /app/wait-for-it.sh && \
+    echo 'while ! nc -z "$REDIS_HOST" "$REDIS_PORT" 2>/dev/null; do sleep 1; done' >> /app/wait-for-it.sh && \
+    echo 'echo "✓ Redis is ready"' >> /app/wait-for-it.sh && \
+    echo 'sleep 5' >> /app/wait-for-it.sh && \
+    echo 'exec "$@"' >> /app/wait-for-it.sh && \
+    chmod +x /app/wait-for-it.sh
+
+# Create staticfiles directory
 RUN mkdir -p /app/staticfiles && \
-    chmod +x /app/wait-for-it.sh && \
     chown -R appuser:appgroup /app
 
 # Switch to non-root user
