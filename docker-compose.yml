@@ -36,12 +36,6 @@ services:
         max-file: "3"
     volumes:
       - kafka_data:/var/lib/kafka/data
-    healthcheck:
-      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:29092 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 20
-      start_period: 60s
     restart: unless-stopped
 
   # TimescaleDB pour les séries temporelles
@@ -106,7 +100,7 @@ services:
   django:
     build: ./crypto_viz_backend
     command: >
-      sh -c "python manage.py migrate &&
+      /app/wait-for-it.sh sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
              python manage.py createsuperuser --noinput --username admin --email admin@cryptoviz.com || true &&
              gunicorn crypto_viz.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 4 --worker-class gthread --worker-tmp-dir /dev/shm"
@@ -140,12 +134,9 @@ services:
         max-size: "10m"
         max-file: "3"
     depends_on:
-      kafka:
-        condition: service_healthy
-      timescaledb:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      - kafka
+      - timescaledb
+      - redis
     restart: unless-stopped
 
   # Prometheus pour monitoring

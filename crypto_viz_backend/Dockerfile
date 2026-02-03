@@ -31,7 +31,8 @@ RUN addgroup -g 1000 -S appgroup && \
 RUN apk add --no-cache \
     postgresql-client \
     libpq \
-    curl
+    curl \
+    netcat-openbsd
 
 # Copy virtual environment from builder
 COPY --from=builder /opt/venv /opt/venv
@@ -47,6 +48,10 @@ WORKDIR /app
 
 # Copy application code
 COPY --chown=appuser:appgroup . .
+
+# Copy wait script
+COPY --chown=appuser:appgroup wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
 
 # Create staticfiles directory
 RUN mkdir -p staticfiles && chown -R appuser:appgroup /app
