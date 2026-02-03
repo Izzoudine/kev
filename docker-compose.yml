@@ -1,3 +1,5 @@
+version: '2.1'
+
 services:
   # Kafka 4.1.1 en mode KRaft (sans ZooKeeper)
   kafka:
@@ -138,9 +140,12 @@ services:
         max-size: "10m"
         max-file: "3"
     depends_on:
-      - kafka
-      - timescaledb
-      - redis
+      kafka:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
 
   # Prometheus pour monitoring
@@ -223,15 +228,8 @@ services:
       options:
         max-size: "5m"
         max-file: "3"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9308/metrics"]
-      interval: 30s
-      timeout: 10s
-      start_period: 60s
-      retries: 5
     depends_on:
-      kafka:
-        condition: service_healthy
+      - kafka
     restart: unless-stopped
 
   # Node Exporter pour métriques système
