@@ -244,4 +244,4 @@ cython_debug/
 crypto_viz_backend/api/migrations/*
 .idea/
 .vscode/
-logs/
+
