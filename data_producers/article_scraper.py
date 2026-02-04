@@ -30,7 +30,7 @@ producer_config = {
 producer = Producer(producer_config)
 
 RSS_FEEDS = {
-    'CoinDesk': 'https://www.coindesk.com/arc/outboundfeeds/rss/',
+    'CoinDesk': 'https://feeds.coindesk.com/news/rss',
     'Cointelegraph': 'https://cointelegraph.com/rss',
     'Decrypt': 'https://decrypt.co/feed',
     'CryptoSlate': 'https://cryptoslate.com/feed/',
@@ -38,7 +38,7 @@ RSS_FEEDS = {
 }
 
 seen_articles = set()
-SCRAPE_INTERVAL = 300  # 5 minutes
+SCRAPE_INTERVAL = 120  # 2 minutes au lieu de 5
 
 def delivery_report(err, msg):
     """Callback pour les confirmations de livraison."""
@@ -84,7 +84,7 @@ def scrape_feed(source_name, feed_url):
         feed = feedparser.parse(feed_url)
         new_articles_count = 0
         
-        for entry in feed.entries[:10]:  # Limiter à 10 articles par source
+        for entry in feed.entries[:25]:  # Augmenter à 25 articles par source
             article_url = entry.get('link', '')
             
             # Éviter les doublons

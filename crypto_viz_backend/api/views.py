@@ -633,6 +633,9 @@ Le spread (ask - bid) indique la liquidité du marché:
     def get(self, request, pair):
         """Récupère l'historique des tickers pour une paire."""
         try:
+            # Convertir le format ETH-USD -> ETH/USD pour la base de données
+            db_pair = pair.replace('-', '/')
+            
             period = request.query_params.get('periode', '24h')
             start_date = request.query_params.get('date_debut')
             end_date = request.query_params.get('date_fin')
@@ -643,7 +646,7 @@ Le spread (ask - bid) indique la liquidité du marché:
                 end_date = parse_datetime(end_date)
             
             data = timescale_client.get_ticker_history(
-                pair,
+                db_pair,  # Utiliser le format avec slash
                 period=period if not start_date else None,
                 start_date=start_date,
                 end_date=end_date
@@ -742,6 +745,9 @@ data.data.forEach(trade => {
     def get(self, request, pair):
         """Récupère l'historique des trades pour une paire."""
         try:
+            # Convertir le format ETH-USD -> ETH/USD pour la base de données
+            db_pair = pair.replace('-', '/')
+            
             period = request.query_params.get('periode', '24h')
             start_date = request.query_params.get('date_debut')
             end_date = request.query_params.get('date_fin')
@@ -752,7 +758,7 @@ data.data.forEach(trade => {
                 end_date = parse_datetime(end_date)
             
             data = timescale_client.get_trade_history(
-                pair,
+                db_pair,  # Utiliser le format avec slash
                 period=period if not start_date else None,
                 start_date=start_date,
                 end_date=end_date

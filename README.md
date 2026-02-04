@@ -153,7 +153,7 @@ T-DAT/
 │   │   └── wsgi.py
 │   └──  api/                       # Application API
 │       ├── models.py               # Modèles SQLite
-│       ├── views.py                # Endpoints REST documentés
+│       ├──                 # Endpoints REST documentés
 │       ├── serializers.py          # Serializers avec exemples
 │       ├── timescale_client.py     # Client TimescaleDB
 │       └── urls.py                 # Routes API v1

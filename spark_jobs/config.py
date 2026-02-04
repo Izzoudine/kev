@@ -18,7 +18,7 @@ TIMESCALE_CONFIG = {
     'port': '15432', 
     'database': 'crypto_viz_ts',
     'user': 'postgres',
-    'password': '',
+    'password': 'password',
 }
 
 # JDBC URL pour TimescaleDB (PostgreSQL)
