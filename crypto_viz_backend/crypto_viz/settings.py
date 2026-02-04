@@ -75,21 +75,22 @@ TEMPLATES = [
 WSGI_APPLICATION = 'crypto_viz.wsgi.application'
 
 # Database
-# SQLite pour métadonnées Django uniquement (sessions, auth, config)
+# PostgreSQL pour toutes les données (migrations + séries temporelles)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'crypto_viz_ts',
+        'USER': 'postgres',
+        'HOST': '167.172.111.211',
+        'PORT': '15432',
     },
     # Configuration TimescaleDB pour séries temporelles
-    # Cette connexion sera utilisée directement (sans ORM Django)
     'timescaledb': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('TIMESCALE_DB_NAME', 'crypto_viz_ts'),
-        'USER': os.environ.get('TIMESCALE_DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('TIMESCALE_DB_PASSWORD', 'password'),
-        'HOST': os.environ.get('TIMESCALE_DB_HOST', 'timescaledb'),
-        'PORT': os.environ.get('TIMESCALE_DB_PORT', '5432'),
+        'NAME': 'crypto_viz_ts',
+        'USER': 'postgres',
+        'HOST': '167.172.111.211',
+        'PORT': '15432',
     }
 }
 
