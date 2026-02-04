@@ -14,11 +14,11 @@ KAFKA_TOPICS = {
 
 # TimescaleDB Configuration
 TIMESCALE_CONFIG = {
-    'host': os.environ.get('TIMESCALE_HOST', 'localhost'),
-    'port': os.environ.get('TIMESCALE_PORT', '15432'),
-    'database': os.environ.get('TIMESCALE_DB', 'crypto_viz_ts'),
-    'user': os.environ.get('TIMESCALE_USER', 'postgres'),
-    'password': os.environ.get('TIMESCALE_PASSWORD', 'password'),
+    'host': 'localhost',
+    'port': '15432', 
+    'database': 'crypto_viz_ts',
+    'user': 'postgres',
+    'password': '',
 }
 
 # JDBC URL pour TimescaleDB (PostgreSQL)
