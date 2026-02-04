@@ -81,13 +81,15 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'crypto_viz_ts',
         'USER': 'postgres',
+        'PASSWORD': 'password',
         'HOST': 'timescaledb',
         'PORT': '5432',
     },
     'timescaledb': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'crypto_viz_ts',
-        'User': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
         'HOST': 'timescaledb',
         'PORT': '5432',
     }
