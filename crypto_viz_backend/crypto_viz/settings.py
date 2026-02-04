@@ -81,6 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'crypto_viz_ts',
         'USER': 'postgres',
+        'PASSWORD': 'cryptoviz2024',
         'HOST': 'timescaledb',
         'PORT': '5432',
     },
@@ -88,6 +89,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'crypto_viz_ts',
         'USER': 'postgres',
+        'PASSWORD': 'cryptoviz2024',
         'HOST': 'timescaledb',
         'PORT': '5432',
     }
